@@ -25,4 +25,4 @@
 
 ## Project Summary
 
-This is a summary of the project!
+There are over 33,000 tracked objects in Earth’s orbit split between active satellites, dead ones, spent rocket bodies, and debris, and this number is only growing. We are building an app that pulls the public satellite data catalog and launch records into a database. The users are able to query the orbital population as a whole population, and can search, filter, compare, and save objects to their own watchlists with notes. Other applications like, https://orbitalradar.com/ are focused on live tracking of objects, but our application will focus on the history of the objects in space. For example, the user can see how the orbital population changes over time and can filter based on country, company, type of satellite, etc.
