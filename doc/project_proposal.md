@@ -87,7 +87,7 @@ We mainly use the Event Catalog and the Launch Catalog. As our project's focus i
 
 ### Low-Fidelity UI Mockup
 
-*[Insert mockup image or link here]*
+![Low-fidelity UI mockup](UI_mockup.jpg)
 
 ## 7. Work Distribution
 
