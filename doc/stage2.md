@@ -40,8 +40,6 @@ User – SpaceObject (many-to-many, through WatchList): Because each WatchList r
 
 LaunchSite – SpaceObject, "carries" (derived): The diagram shows a launch site carrying many objects (1..\* objects to 1 site). We treat this as derived through Launch (object, then launch, then site), so it is not stored as a separate foreign key. Storing it would repeat what Launch.Launch_Site already says.
 
-Relationships stored as foreign keys but not drawn as separate lines: SpaceObject.Parent references another SpaceObject (debris to the object it broke off from, 0..1 to 0..\*), and SpaceObject.Manufacturer and LaunchSite.StateCode reference Organization (builder and country).
-
 ## Relational Schema
 
 SpaceObject(ID:INT [PK], Name:VARCHAR(30), JCAT:VARCHAR(12) [UNIQUE], Satcat:VARCHAR(8), Launch_Tag:VARCHAR(12) [FK to Launch.Launch_Tag], Type:VARCHAR(12), Parent:VARCHAR(12) [FK to SpaceObject.JCAT], Owner:VARCHAR(8) [FK to Organization.Code], Manufacturer:VARCHAR(8) [FK to Organization.Code], DryMass:DECIMAL(10,1), Status:VARCHAR(8), DDate:DATETIME, Perigee:INT, Apogee:INT, Inc:DECIMAL(5,2), OpOrbit:VARCHAR(8))
