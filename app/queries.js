@@ -25,8 +25,10 @@ module.exports = {
   //
   // Tip: add a LIMIT (e.g. 50) so a short keyword doesn't return 70,000 rows.
   searchObjects: `
-    SELECT Name
+    SELECT DISTINCT JCAT, Name, Type, Status, Owner
     FROM Organization
+    NATURAL JOIN SpaceObject
+    NATURAL JOIN LaunchSite
     WHERE name LIKE CONCAT('%', :keyword, '%')
     ORDER BY name
     LIMIT 50
