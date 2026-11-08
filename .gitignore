@@ -1,0 +1,11 @@
+# Dependencies (recreated by "npm install")
+node_modules/
+
+# Secrets - database password lives here. Share it in the team chat, never on GitHub.
+.env
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

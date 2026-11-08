@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space Junk Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Space Junk Tracker</h1>
+    <span id="db-status" class="status status-checking">Checking database…</span>
+  </header>
+
+  <main>
+    <p class="tagline">Search the history of 70,000+ objects humanity has put in orbit.</p>
+
+    <form id="search-form" autocomplete="off">
+      <input id="search-input" type="search" placeholder="Search by name, e.g. Starlink, Hubble, ISS" />
+      <button type="submit">Search</button>
+    </form>
+
+    <p id="message" class="message"></p>
+
+    <table id="results" hidden>
+      <thead>
+        <tr>
+          <th>JCAT</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Owner</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <footer>CS 411 · Team048 TeamBuster</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
