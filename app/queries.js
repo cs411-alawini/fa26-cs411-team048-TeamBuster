@@ -25,6 +25,10 @@ module.exports = {
   //
   // Tip: add a LIMIT (e.g. 50) so a short keyword doesn't return 70,000 rows.
   searchObjects: `
-    -- TODO(team): write the keyword search query here
+    SELECT Name
+    FROM Organization
+    WHERE name LIKE CONCAT('%', :keyword, '%')
+    ORDER BY name
+    LIMIT 50
   `,
 };
