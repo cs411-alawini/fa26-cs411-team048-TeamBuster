@@ -27,8 +27,6 @@ module.exports = {
   searchObjects: `
     SELECT DISTINCT JCAT, Name, Type, Status, Owner
     FROM SpaceObject
-    SELECT Name
-    FROM Organization
     WHERE name LIKE CONCAT('%', :keyword, '%')
     ORDER BY name
     LIMIT 50
