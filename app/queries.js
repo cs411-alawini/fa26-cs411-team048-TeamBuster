@@ -25,13 +25,10 @@ module.exports = {
   //
   // Tip: add a LIMIT (e.g. 50) so a short keyword doesn't return 70,000 rows.
   searchObjects: `
-<<<<<<< HEAD
     SELECT DISTINCT JCAT, Name, Type, Status, Owner
     FROM SpaceObject
-=======
     SELECT Name
     FROM Organization
->>>>>>> df0dfd2b898a5c7de5254726580dc05f2fa50a08
     WHERE name LIKE CONCAT('%', :keyword, '%')
     ORDER BY name
     LIMIT 50
