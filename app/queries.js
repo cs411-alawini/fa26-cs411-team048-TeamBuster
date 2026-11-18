@@ -49,7 +49,9 @@ module.exports = {
   // params:  :userId
   // returns: JCAT, Name, Type, Status, AddedAt, Note
   watchlistList: `
-    -- TODO(team): get one user's watchlist
+    SELECT w.JCAT, s.Name, s.Type, s.Status, w.AddedAt, w.Note
+    FROM Watchlist as w join Spaceobject as s on w.JCAT = s.JCAT
+    WHERE w.UserID = :userId
   `,
 
   // CREATE - "+ Watchlist" button on the search results
@@ -57,7 +59,8 @@ module.exports = {
   // returns: nothing
   // note: AddedAt isn't sent by the server
   watchlistAdd: `
-    -- TODO(team): add to watchlist
+    INSERT INTO Watchlist(UserId, JCAT, AddedAt, Note)
+    VALUES (:userId, :jcat, NOW(), :note)
   `,
 
   // UPDATE - Save button next to a note
@@ -65,7 +68,9 @@ module.exports = {
   // returns: nothing
   // should only change this user's row for this object
   watchlistUpdateNote: `
-    -- TODO(team): update a note
+    UPDATE Watchlist
+    SET Note = :note
+    WHERE UserId = :userId and JCAT = :jcat
   `,
 
   // DELETE - Remove button
@@ -73,7 +78,8 @@ module.exports = {
   // returns: nothing (if 0 rows are affected the page says it wasn't in the watchlist)
   // should only remove this user's row for this object
   watchlistRemove: `
-    -- TODO(team): remove from watchlist
+    DELETE FROM Watchlist
+    WHERE UserId = :userId and JCAT = :jcat
   `,
 
   // ---------- advanced stuff (Advanced tab) ----------
@@ -86,7 +92,11 @@ module.exports = {
   // returns: any columns. if the procedure returns multiple result sets,
   //          each one shows up as its own table
   callStatsProcedure: `
-    -- TODO(team): run the stored procedure
+    SELECT
+      :orgCode AS org_code,
+      :startYear AS start_year,
+      :endYear AS end_year,
+      'Procedure not implemented yet' AS status;
   `,
 
   // transaction - "Run transaction" button
@@ -96,7 +106,15 @@ module.exports = {
   // isolation level included). if anything fails the server rolls it back.
   // also copy the final version into doc/advanced_programs.sql
   runTransaction: `
-    -- TODO(team): the transaction
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+    START TRANSACTION;
+
+    SELECT
+      :userId AS user_id,
+      'Transaction test successful' AS status;
+
+    COMMIT;
   `,
 
   // (optional) "Show what the trigger did" button - lets us show the trigger
@@ -104,6 +122,8 @@ module.exports = {
   // params:  :userId
   // returns: any columns
   triggerEffect: `
-    -- TODO(team, optional): show the trigger's effect
+    SELECT
+      :userId AS user_id,
+      'Trigger not implemented yet' AS status;
   `,
 };
