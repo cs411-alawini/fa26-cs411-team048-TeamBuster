@@ -25,14 +25,16 @@ module.exports = {
     LIMIT 50
   `,
 
-  // ---------- account ----------
+  // ---------- account (done) ----------
 
   // sign in (also runs right after createUser to log the new user in)
   // params:  :username, :password
   // returns: UserID, Username
   //          1 row if the login is right, 0 rows if it's wrong
   findUser: `
-    -- TODO(team): sign in lookup
+    SELECT UserID, Username
+    FROM User
+    WHERE :username = Username AND :password = Password
   `,
 
   // create account form
@@ -40,7 +42,8 @@ module.exports = {
   // returns: nothing
   // note: the server doesn't send a UserID, so the new user needs to get one some other way
   createUser: `
-    -- TODO(team): create account
+    INSERT INTO User(Username, Password, Email)
+    VALUES (:username, :password, :email)
   `,
 
   // ---------- watchlist CRUD ----------
