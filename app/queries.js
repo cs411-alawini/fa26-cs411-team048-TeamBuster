@@ -1,34 +1,109 @@
-// queries.js - ALL SQL for the app lives here.
+// queries.js - all the SQL for the app goes here.
 //
-// ============================================================
-//  COURSE RULE: SQL in this file must be written by the team.
-//  AI tools (ChatGPT, Claude, Copilot...) may NOT write or edit
-//  SQL queries, stored procedures, or triggers. (CS 411 syllabus VII.A)
-// ============================================================
+// Course rule: the SQL in this file has to be written by us, not AI.
 //
-// How it works:
-//   - Each entry is a SQL string. server.js runs it and sends the rows to the page.
-//   - Leave an entry as '' and its endpoint will answer "not written yet" (HTTP 501)
-//     instead of crashing.
-//   - Use named parameters (e.g. :keyword). Never paste user input into the string
-//     yourself - the parameter system escapes it and prevents SQL injection.
+// - Each entry is a SQL string that server.js runs.
+// - If an entry only has a -- TODO comment, its feature shows "Not built yet"
+//   instead of crashing. The checklist at the bottom of the site shows which are left.
+// - Use the named params listed above each one (:userId etc). Don't put user
+//   input into the string directly.
+// - Return the column names listed. Use AS if your column is named differently.
+//
+// More details in doc/QUERIES_TODO.md
 
 module.exports = {
-  // GET /api/objects/search?q=<text>
-  //
-  // Parameters available:
-  //   :keyword  -> exactly what the user typed in the search box (e.g. "starlink")
-  //
-  // The results table on the home page shows these columns, so SELECT
-  // them with these names (use AS to rename if needed):
-  //   JCAT, Name, Type, Status, Owner
-  //
-  // Tip: add a LIMIT (e.g. 50) so a short keyword doesn't return 70,000 rows.
+  // ---------- search (done) ----------
+
+  // GET /api/objects/search?q=...
+  // params:  :keyword  (whatever was typed in the search box)
+  // returns: JCAT, Name, Type, Status, Owner
   searchObjects: `
-    SELECT JCAT, Name, Type, Status, Owner
+    SELECT DISTINCT JCAT, Name, Type, Status, Owner
     FROM SpaceObject
     WHERE name LIKE CONCAT('%', :keyword, '%')
     ORDER BY name
     LIMIT 50
+  `,
+
+  // ---------- account ----------
+
+  // sign in (also runs right after createUser to log the new user in)
+  // params:  :username, :password
+  // returns: UserID, Username
+  //          1 row if the login is right, 0 rows if it's wrong
+  findUser: `
+    -- TODO(team): sign in lookup
+  `,
+
+  // create account form
+  // params:  :username, :email, :password
+  // returns: nothing
+  // note: the server doesn't send a UserID, so the new user needs to get one some other way
+  createUser: `
+    -- TODO(team): create account
+  `,
+
+  // ---------- watchlist CRUD ----------
+
+  // READ - the My Watchlist tab
+  // params:  :userId
+  // returns: JCAT, Name, Type, Status, AddedAt, Note
+  watchlistList: `
+    -- TODO(team): get one user's watchlist
+  `,
+
+  // CREATE - "+ Watchlist" button on the search results
+  // params:  :userId, :jcat, :note  (note is null if left blank)
+  // returns: nothing
+  // note: AddedAt isn't sent by the server
+  watchlistAdd: `
+    -- TODO(team): add to watchlist
+  `,
+
+  // UPDATE - Save button next to a note
+  // params:  :userId, :jcat, :note
+  // returns: nothing
+  // should only change this user's row for this object
+  watchlistUpdateNote: `
+    -- TODO(team): update a note
+  `,
+
+  // DELETE - Remove button
+  // params:  :userId, :jcat
+  // returns: nothing (if 0 rows are affected the page says it wasn't in the watchlist)
+  // should only remove this user's row for this object
+  watchlistRemove: `
+    -- TODO(team): remove from watchlist
+  `,
+
+  // ---------- advanced stuff (Advanced tab) ----------
+  // The CREATE PROCEDURE / CREATE TRIGGER / constraint code goes in
+  // doc/advanced_programs.sql and gets run once on the database.
+  // These slots are just what the buttons run.
+
+  // stored procedure - "Run procedure" button
+  // params:  :orgCode, :startYear, :endYear  (any of them can be null if left blank)
+  // returns: any columns. if the procedure returns multiple result sets,
+  //          each one shows up as its own table
+  callStatsProcedure: `
+    -- TODO(team): run the stored procedure
+  `,
+
+  // transaction - "Run transaction" button
+  // params:  :userId
+  // returns: any columns, one table per SELECT
+  // this one can have multiple statements separated by ; (the whole transaction,
+  // isolation level included). if anything fails the server rolls it back.
+  // also copy the final version into doc/advanced_programs.sql
+  runTransaction: `
+    -- TODO(team): the transaction
+  `,
+
+  // (optional) "Show what the trigger did" button - lets us show the trigger
+  // worked during the demo. can skip if the trigger's effect is visible somewhere else.
+  // params:  :userId
+  // returns: any columns
+  triggerEffect: `
+    -- TODO(team, optional): show the trigger's effect
   `,
 };

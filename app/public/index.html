@@ -9,35 +9,164 @@
 <body>
   <header>
     <h1>Space Junk Tracker</h1>
-    <span id="db-status" class="status status-checking">Checking database…</span>
+    <div class="header-right">
+      <span id="user-badge" class="status">Not signed in</span>
+      <span id="db-status" class="status">Checking database…</span>
+    </div>
   </header>
 
+  <nav class="tabs" role="tablist">
+    <button class="tab-button active" data-tab="search" role="tab">Search</button>
+    <button class="tab-button" data-tab="watchlist" role="tab">My Watchlist</button>
+    <button class="tab-button" data-tab="advanced" role="tab">Advanced</button>
+    <button class="tab-button" data-tab="account" role="tab">Account</button>
+  </nav>
+
   <main>
-    <p class="tagline">Search the history of 70,000+ objects humanity has put in orbit.</p>
+    <!-- search tab (js/search.js) -->
+    <section id="tab-search" class="tab">
+      <h2>Search space objects</h2>
+      <p class="tagline">Search the history of 70,000+ objects humanity has put in orbit.</p>
 
-    <form id="search-form" autocomplete="off">
-      <input id="search-input" type="search" placeholder="Search by name, e.g. Starlink, Hubble, ISS" />
-      <button type="submit">Search</button>
-    </form>
+      <form id="search-form" class="row-form" autocomplete="off">
+        <input id="search-input" type="search" placeholder="Search by name, e.g. Starlink, Hubble, ISS" />
+        <button type="submit">Search</button>
+      </form>
 
-    <p id="message" class="message"></p>
+      <p id="search-message" class="message"></p>
 
-    <table id="results" hidden>
-      <thead>
-        <tr>
-          <th>JCAT</th>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Status</th>
-          <th>Owner</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+      <div class="table-wrap">
+        <table id="search-results" hidden>
+          <thead>
+            <tr>
+              <th>JCAT</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Owner</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- watchlist tab (js/watchlist.js) -->
+    <section id="tab-watchlist" class="tab" hidden>
+      <h2>My Watchlist</h2>
+      <p class="hint">Add objects from the Search tab. You can edit notes or remove objects here.</p>
+
+      <p id="watchlist-message" class="message"></p>
+
+      <div class="table-wrap">
+        <table id="watchlist-table" hidden>
+          <thead>
+            <tr>
+              <th>JCAT</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Added</th>
+              <th>Note</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- advanced tab (js/advanced.js) -->
+    <!-- TODO: change these titles/descriptions once we know what each one does -->
+    <section id="tab-advanced" class="tab" hidden>
+      <h2>Advanced database features</h2>
+
+      <div class="panel">
+        <h3>Orbital statistics <span class="tag">stored procedure</span></h3>
+        <p class="hint">Leave a box empty to include everything.</p>
+        <form id="stats-form" class="row-form" autocomplete="off">
+          <input id="stats-org" placeholder="Organization / country code (e.g. US)" />
+          <input id="stats-start" type="number" placeholder="From year" min="1900" max="2100" />
+          <input id="stats-end" type="number" placeholder="To year" min="1900" max="2100" />
+          <button type="submit">Run procedure</button>
+        </form>
+        <p id="stats-message" class="message"></p>
+        <div id="stats-results"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Watchlist transaction <span class="tag">transaction</span></h3>
+        <p class="hint">Runs as one transaction for the signed-in user.</p>
+        <button id="transaction-button" type="button">Run transaction</button>
+        <p id="transaction-message" class="message"></p>
+        <div id="transaction-results"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Watchlist trigger <span class="tag">trigger</span></h3>
+        <p class="hint">
+          Runs automatically when you add, edit, or remove watchlist items.
+          Make a change in My Watchlist, then come back and click below.
+        </p>
+        <button id="trigger-button" type="button">Show what the trigger did</button>
+        <p id="trigger-message" class="message"></p>
+        <div id="trigger-results"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Constraints <span class="tag">constraints</span></h3>
+        <p class="hint">
+          If the database rejects something (duplicate item, unknown object, a CHECK rule...),
+          the error from MySQL shows up in red.
+        </p>
+      </div>
+    </section>
+
+    <!-- account tab (js/account.js) -->
+    <section id="tab-account" class="tab" hidden>
+      <h2>Account</h2>
+      <div id="signed-in-view" hidden>
+        <p>You are signed in as <strong id="signed-in-name"></strong>.</p>
+        <button id="sign-out-button" type="button" class="secondary">Sign out</button>
+      </div>
+
+      <div id="signed-out-view" class="two-columns">
+        <form id="login-form" class="panel stack-form" autocomplete="off">
+          <h3>Sign in</h3>
+          <input id="login-username" placeholder="Username" />
+          <input id="login-password" type="password" placeholder="Password" />
+          <button type="submit">Sign in</button>
+        </form>
+
+        <form id="signup-form" class="panel stack-form" autocomplete="off">
+          <h3>Create account</h3>
+          <input id="signup-username" placeholder="Username" />
+          <input id="signup-email" type="email" placeholder="Email" />
+          <input id="signup-password" type="password" placeholder="Password" />
+          <button type="submit">Create account</button>
+        </form>
+      </div>
+      <p id="account-message" class="message"></p>
+    </section>
   </main>
 
-  <footer>CS 411 · Team048 TeamBuster</footer>
+  <footer>
+    <!-- for us: shows which queries in app/queries.js are still empty -->
+    <details id="checklist">
+      <summary id="checklist-summary">SQL checklist</summary>
+      <ul id="checklist-list"></ul>
+      <p class="hint">Fill these in app/queries.js (see doc/QUERIES_TODO.md)</p>
+    </details>
+    <p>CS 411 · Team048 TeamBuster</p>
+  </footer>
 
-  <script src="app.js"></script>
+  <!-- common.js has to load first -->
+  <script src="js/common.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/watchlist.js"></script>
+  <script src="js/advanced.js"></script>
+  <script src="js/account.js"></script>
+  <script src="js/status.js"></script>
 </body>
 </html>

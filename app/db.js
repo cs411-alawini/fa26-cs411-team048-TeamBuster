@@ -7,7 +7,7 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 
-const pool = mysql.createPool({
+const settings = {
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT || 3306),
   user: process.env.DB_USER,
@@ -25,7 +25,14 @@ const pool = mysql.createPool({
   // certificate (fine for a class project; avoids downloading CA files).
   // Set DB_SSL=false in .env only if you point at a local MySQL without SSL.
   ssl: process.env.DB_SSL === 'false' ? undefined : { rejectUnauthorized: false },
-});
+};
+
+const pool = mysql.createPool(settings);
+
+// second pool that allows multiple statements separated by ;
+// only used for the transaction and stored procedure slots.
+// user input still only goes in through :params so it's not an injection risk
+const multiPool = mysql.createPool({ ...settings, connectionLimit: 2, multipleStatements: true });
 
 // Checks that we can reach the database without running any SQL.
 async function ping() {
@@ -37,4 +44,4 @@ async function ping() {
   }
 }
 
-module.exports = { pool, ping };
+module.exports = { pool, multiPool, ping };
