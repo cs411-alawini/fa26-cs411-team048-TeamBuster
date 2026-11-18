@@ -1,5 +1,4 @@
-// status.js - the "DB connected" pill in the header, and the
-// "Team SQL checklist" at the bottom of the page (which query slots are still empty).
+// status.js - database status in the header + the SQL checklist in the footer
 
 async function checkDatabase() {
   const statusEl = document.getElementById('db-status');
@@ -19,19 +18,19 @@ async function loadChecklist() {
   const summary = document.getElementById('checklist-summary');
   try {
     const slots = await api('/api/queries');
-    const done = slots.filter((slot) => slot.written).length;
-    summary.textContent = `Team SQL checklist: ${done} of ${slots.length} queries written`;
+    const done = slots.filter((s) => s.written).length;
+    summary.textContent = `SQL checklist: ${done}/${slots.length} done`;
     list.replaceChildren();
     for (const slot of slots) {
       const li = document.createElement('li');
-      li.textContent = `${slot.written ? '✅' : '⬜'} ${slot.name}`;
+      li.textContent = `[${slot.written ? 'x' : ' '}] ${slot.name}`;
       li.className = slot.written ? 'done' : 'todo';
       list.append(li);
     }
-    // Open the checklist automatically while there's still work left.
+    // leave it open until everything is written
     document.getElementById('checklist').open = done < slots.length;
   } catch (err) {
-    summary.textContent = `Team SQL checklist (could not load: ${err.message})`;
+    summary.textContent = `SQL checklist (couldn't load: ${err.message})`;
   }
 }
 

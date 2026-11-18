@@ -27,14 +27,11 @@ const settings = {
   ssl: process.env.DB_SSL === 'false' ? undefined : { rejectUnauthorized: false },
 };
 
-// The normal pool: one SQL statement per query. Used by almost every route.
 const pool = mysql.createPool(settings);
 
-// A second, small pool that allows SEVERAL statements in one query string
-// (separated by semicolons). Only the transaction and stored-procedure routes
-// use it, because a transaction is several statements that must run on the
-// same connection. Still safe from SQL injection: user input only ever goes
-// in through named parameters like :userId, never pasted into the string.
+// second pool that allows multiple statements separated by ;
+// only used for the transaction and stored procedure slots.
+// user input still only goes in through :params so it's not an injection risk
 const multiPool = mysql.createPool({ ...settings, connectionLimit: 2, multipleStatements: true });
 
 // Checks that we can reach the database without running any SQL.

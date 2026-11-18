@@ -10,12 +10,11 @@
   <header>
     <h1>Space Junk Tracker</h1>
     <div class="header-right">
-      <span id="user-badge" class="status status-checking">Not signed in</span>
-      <span id="db-status" class="status status-checking">Checking database…</span>
+      <span id="user-badge" class="status">Not signed in</span>
+      <span id="db-status" class="status">Checking database…</span>
     </div>
   </header>
 
-  <!-- Tabs: each button shows the <section> with id "tab-<name>" (see js/common.js) -->
   <nav class="tabs" role="tablist">
     <button class="tab-button active" data-tab="search" role="tab">Search</button>
     <button class="tab-button" data-tab="watchlist" role="tab">My Watchlist</button>
@@ -24,8 +23,9 @@
   </nav>
 
   <main>
-    <!-- ============ SEARCH (js/search.js, query: searchObjects) ============ -->
+    <!-- search tab (js/search.js) -->
     <section id="tab-search" class="tab">
+      <h2>Search space objects</h2>
       <p class="tagline">Search the history of 70,000+ objects humanity has put in orbit.</p>
 
       <form id="search-form" class="row-form" autocomplete="off">
@@ -52,10 +52,10 @@
       </div>
     </section>
 
-    <!-- ============ WATCHLIST (js/watchlist.js, queries: watchlist*) ============ -->
+    <!-- watchlist tab (js/watchlist.js) -->
     <section id="tab-watchlist" class="tab" hidden>
       <h2>My Watchlist</h2>
-      <p class="hint">Add objects from the Search tab. Edit a note and click Save, or Remove an object.</p>
+      <p class="hint">Add objects from the Search tab. You can edit notes or remove objects here.</p>
 
       <p id="watchlist-message" class="message"></p>
 
@@ -77,12 +77,11 @@
       </div>
     </section>
 
-    <!-- ============ ADVANCED (js/advanced.js) ============ -->
-    <!-- Rename the headings/descriptions below once your team knows what each program does. -->
+    <!-- advanced tab (js/advanced.js) -->
+    <!-- TODO: change these titles/descriptions once we know what each one does -->
     <section id="tab-advanced" class="tab" hidden>
       <h2>Advanced database features</h2>
 
-      <!-- Stored procedure (query: callStatsProcedure) -->
       <div class="panel">
         <h3>Orbital statistics <span class="tag">stored procedure</span></h3>
         <p class="hint">Leave a box empty to include everything.</p>
@@ -96,20 +95,18 @@
         <div id="stats-results"></div>
       </div>
 
-      <!-- Transaction (query: runTransaction) -->
       <div class="panel">
         <h3>Watchlist transaction <span class="tag">transaction</span></h3>
-        <p class="hint">Runs as one all-or-nothing transaction for the signed-in user.</p>
+        <p class="hint">Runs as one transaction for the signed-in user.</p>
         <button id="transaction-button" type="button">Run transaction</button>
         <p id="transaction-message" class="message"></p>
         <div id="transaction-results"></div>
       </div>
 
-      <!-- Trigger (fires automatically; query: triggerEffect shows its effect) -->
       <div class="panel">
         <h3>Watchlist trigger <span class="tag">trigger</span></h3>
         <p class="hint">
-          Fires automatically when you add, edit, or remove watchlist items.
+          Runs automatically when you add, edit, or remove watchlist items.
           Make a change in My Watchlist, then come back and click below.
         </p>
         <button id="trigger-button" type="button">Show what the trigger did</button>
@@ -117,20 +114,20 @@
         <div id="trigger-results"></div>
       </div>
 
-      <!-- Constraints (nothing to click: rejections show up as red messages everywhere) -->
       <div class="panel">
         <h3>Constraints <span class="tag">constraints</span></h3>
         <p class="hint">
-          When the database rejects bad input (duplicate item, unknown object, a CHECK rule, ...),
-          MySQL's reason is shown in red right where you clicked.
+          If the database rejects something (duplicate item, unknown object, a CHECK rule...),
+          the error from MySQL shows up in red.
         </p>
       </div>
     </section>
 
-    <!-- ============ ACCOUNT (js/account.js, queries: findUser, createUser) ============ -->
+    <!-- account tab (js/account.js) -->
     <section id="tab-account" class="tab" hidden>
+      <h2>Account</h2>
       <div id="signed-in-view" hidden>
-        <h2>Signed in as <span id="signed-in-name"></span></h2>
+        <p>You are signed in as <strong id="signed-in-name"></strong>.</p>
         <button id="sign-out-button" type="button" class="secondary">Sign out</button>
       </div>
 
@@ -154,17 +151,17 @@
     </section>
   </main>
 
-  <!-- Team-only helper: which SQL slots in app/queries.js are still empty (js/status.js) -->
   <footer>
+    <!-- for us: shows which queries in app/queries.js are still empty -->
     <details id="checklist">
-      <summary id="checklist-summary">Team SQL checklist</summary>
+      <summary id="checklist-summary">SQL checklist</summary>
       <ul id="checklist-list"></ul>
-      <p class="hint">Write the empty ones in app/queries.js. Details in doc/QUERIES_TODO.md.</p>
+      <p class="hint">Fill these in app/queries.js (see doc/QUERIES_TODO.md)</p>
     </details>
     <p>CS 411 · Team048 TeamBuster</p>
   </footer>
 
-  <!-- common.js must load first: the others use its helpers. -->
+  <!-- common.js has to load first -->
   <script src="js/common.js"></script>
   <script src="js/search.js"></script>
   <script src="js/watchlist.js"></script>

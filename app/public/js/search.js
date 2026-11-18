@@ -1,6 +1,5 @@
-// search.js - the Search tab.
-//   Keyword search   -> GET  /api/objects/search?q=...   (query: searchObjects)
-//   "+ Watchlist"    -> POST /api/watchlist               (query: watchlistAdd)  = the CREATE in CRUD
+// search.js - search tab
+// search uses searchObjects, the "+ Watchlist" button uses watchlistAdd (the C in CRUD)
 
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
@@ -23,47 +22,45 @@ async function search(keyword) {
       const tr = document.createElement('tr');
       tr.append(cell(row.JCAT), cell(row.Name), cell(row.Type), cell(row.Status), cell(row.Owner));
 
-      // "+ Watchlist" button for this object
-      const actions = document.createElement('td');
-      const addButton = document.createElement('button');
-      addButton.className = 'small';
-      addButton.textContent = '+ Watchlist';
-      addButton.addEventListener('click', () => addToWatchlist(row, addButton));
-      actions.append(addButton);
-      tr.append(actions);
+      const td = document.createElement('td');
+      const addBtn = document.createElement('button');
+      addBtn.className = 'small';
+      addBtn.textContent = '+ Watchlist';
+      addBtn.addEventListener('click', () => addToWatchlist(row, addBtn));
+      td.append(addBtn);
+      tr.append(td);
 
       searchBody.append(tr);
     }
-    showMessage(searchMessage, `${rows.length} result${rows.length === 1 ? '' : 's'} for "${keyword}"`);
+    showMessage(searchMessage, `${rows.length} result(s) for "${keyword}"`);
     searchTable.hidden = false;
   } catch (err) {
     showMessage(searchMessage, err.message, 'error');
   }
 }
 
-// CREATE: save one object to the signed-in user's watchlist, with an optional note.
-async function addToWatchlist(row, button) {
+async function addToWatchlist(row, btn) {
   const user = getUser();
   if (!user) {
-    showMessage(searchMessage, 'Sign in on the Account tab first to save objects.', 'error');
+    showMessage(searchMessage, 'Sign in on the Account tab first.', 'error');
     return;
   }
-  const note = prompt(`Add "${row.Name}" to your watchlist.\nOptional note:`, '');
-  if (note === null) return; // user clicked Cancel
+  const note = prompt(`Add "${row.Name}" to your watchlist.\nNote (optional):`, '');
+  if (note === null) return; // cancelled
 
-  button.disabled = true;
+  btn.disabled = true;
   try {
     await api('/api/watchlist', 'POST', { userId: user.UserID, jcat: row.JCAT, note });
-    button.textContent = 'Added ✓';
+    btn.textContent = 'Added';
     showMessage(searchMessage, `Added "${row.Name}" to your watchlist.`, 'ok');
   } catch (err) {
-    button.disabled = false;
+    btn.disabled = false;
     showMessage(searchMessage, err.message, 'error');
   }
 }
 
-searchForm.addEventListener('submit', (event) => {
-  event.preventDefault();
+searchForm.addEventListener('submit', (e) => {
+  e.preventDefault();
   const keyword = searchInput.value.trim();
   if (keyword) search(keyword);
 });
