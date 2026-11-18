@@ -53,7 +53,7 @@ module.exports = {
   // returns: JCAT, Name, Type, Status, AddedAt, Note
   watchlistList: `
     SELECT w.JCAT, s.Name, s.Type, s.Status, w.AddedAt, w.Note
-    FROM Watchlist as w join Spaceobject as s on w.JCAT = s.JCAT
+    FROM Watchlist as w join SpaceObject as s on w.JCAT = s.JCAT
     WHERE w.UserID = :userId
   `,
 
